@@ -1,0 +1,16 @@
+services: docker
+
+addons:
+    apt:
+      packages:
+        - docker-ce
+
+script:
+    # Build image from Dockerfile
+    - docker build -t docker-ansible .
+    
+    # Run the container
+    - docker run --name container -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible
+
+    # Check for ansible
+    - docker exec --tty container env TERM=xterm ansible --version
